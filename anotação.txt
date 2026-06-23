@@ -1,0 +1,11 @@
+Essa estrutura já fica preparada para crescer futuramente com:
+
+agenda médica;
+upload de exames;
+emissão de receitas em PDF;
+integração WhatsApp;
+API REST;
+aplicativo mobile;
+multiempresa;
+telemedicina;
+assinatura digital.
