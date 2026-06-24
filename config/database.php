@@ -1,10 +1,17 @@
 <?php
-    return [
-    'host' => $_ENV['DB_HOST'],
-    'port' => $_ENV['DB_PORT'],
-    'database' => $_ENV['DB_DATABASE'],
-    'username' => $_ENV['DB_USERNAME'],
-    'password' => $_ENV['DB_PASSWORD'],
+
+return [
+
+    'host' => $_ENV['DB_HOST'] ?? 'localhost',
+
+    'port' => $_ENV['DB_PORT'] ?? '5432',
+
+    'database' => $_ENV['DB_DATABASE'] ?? 'medcare_db',
+
+    'username' => $_ENV['DB_USERNAME'] ?? 'medcare_user',
+
+    'password' => $_ENV['DB_PASSWORD'] ?? ''
+
 ];
 
 ?>
