@@ -74,10 +74,9 @@ class AuthController extends Controller
     public function dashboard()
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        $this->view('dashboard', [
+        $this->view('dashboard/index', [
             'usuario_nome' => Session::get('usuario_nome'),
             'usuario_papel' => Session::get('usuario_papel')
         ]);
     }
 }
-

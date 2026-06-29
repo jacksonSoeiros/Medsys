@@ -1,11 +1,19 @@
 <?php
 $pacientes = $pacientes ?? [];
 $search = $search ?? '';
+$page = $page ?? 1;
+$totalPages = $totalPages ?? 1;
+$totalPacientes = $totalPacientes ?? count($pacientes);
 ?>
 
 <div class="py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h2">Pacientes</h1>
+        <div>
+            <h1 class="h2 mb-1">Pacientes</h1>
+            <p class="text-muted mb-0">
+                <?= $search !== '' ? 'Resultado da busca atual.' : 'Exibindo os 10 pacientes modificados mais recentemente nos ultimos 30 dias.' ?>
+            </p>
+        </div>
         <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
             <a href="<?= url('pacientes/create') ?>" class="btn btn-success">
                 <i class="bi bi-plus-lg"></i> Novo Paciente
@@ -58,15 +66,20 @@ $search = $search ?? '';
                         </tr>
                     </thead>
                     <tbody>
+                        <?php if (empty($pacientes)): ?>
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">Nenhum paciente encontrado para o periodo selecionado.</td>
+                            </tr>
+                        <?php endif; ?>
                         <?php foreach ($pacientes as $paciente): ?>
                             <tr>
                                 <td><?= $paciente['id'] ?></td>
                                 <td><?= $paciente['nome_completo'] ?></td>
-                                <td><?= $paciente['cpf'] ?></td>
+                                <td><?= formatCpf($paciente['cpf']) ?></td>
                                 <td><?= date('d/m/Y', strtotime($paciente['data_nascimento'])) ?></td>
                                 <td><?= $paciente['endereco_cidade'] ?></td>
                                 <td class="text-end">
-                                    <a href="<?= url("pacientes/{$paciente['id']}") ?>" class="btn btn-sm btn-primary me-1">Visualizar</a>
+                                    <a href="<?= url("pacientes/{$paciente['id']}") ?>" class="btn btn-sm btn-view me-1">Visualizar</a>
                                     <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
                                         <a href="<?= url("pacientes/{$paciente['id']}/edit") ?>" class="btn btn-sm btn-primary me-1">Editar</a>
                                         <a href="<?= url("pacientes/{$paciente['id']}/delete") ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
@@ -82,5 +95,20 @@ $search = $search ?? '';
             </div>
         </div>
     </div>
+
+    <?php if ($search === '' && $totalPages > 1): ?>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <p class="text-muted mb-0">Total de pacientes alterados nos ultimos 30 dias: <?= $totalPacientes ?></p>
+            <nav aria-label="Paginacao de pacientes">
+                <ul class="pagination mb-0">
+                    <?php for ($currentPage = 1; $currentPage <= $totalPages; $currentPage++): ?>
+                        <li class="page-item <?= $currentPage === (int) $page ? 'active' : '' ?>">
+                            <a class="page-link" href="<?= url('pacientes') ?>?page=<?= $currentPage ?>"><?= $currentPage ?></a>
+                        </li>
+                    <?php endfor; ?>
+                </ul>
+            </nav>
+        </div>
+    <?php endif; ?>
 </div>
 

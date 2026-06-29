@@ -38,6 +38,8 @@ class MedicoController extends Controller
         (new \App\Middleware\CsrfMiddleware())->handle();
 
         $data = Security::sanitizeArray($_POST);
+        $data['cpf'] = preg_replace('/\D+/', '', $data['cpf'] ?? '');
+        $data['telefone'] = preg_replace('/\D+/', '', $data['telefone'] ?? '');
 
         $validator = new Validator($data);
         $validator->required('nome_completo')->required('email')->email('email')->required('senha')->minLength('senha', 6)->required('cpf')->cpf('cpf')->required('crm');
@@ -96,6 +98,8 @@ class MedicoController extends Controller
         (new \App\Middleware\CsrfMiddleware())->handle();
 
         $data = Security::sanitizeArray($_POST);
+        $data['cpf'] = preg_replace('/\D+/', '', $data['cpf'] ?? '');
+        $data['telefone'] = preg_replace('/\D+/', '', $data['telefone'] ?? '');
 
         $medicoModel = new Medico();
         $medico = $medicoModel->find($params['id']);
@@ -151,4 +155,3 @@ class MedicoController extends Controller
         Redirect::to('/medicos')->with('success', 'Médico excluído com sucesso!');
     }
 }
-

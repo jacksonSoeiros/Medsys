@@ -28,7 +28,7 @@ class ProntuarioController extends Controller
         }
 
         $prontuarioModel = new Prontuario();
-        $prontuario = $prontuarioModel->findByPacienteId($params['id']);
+        $prontuario = $prontuarioModel->ensureForPaciente((int) $params['id']);
 
         $evolucaoModel = new ProntuarioEvolucao();
         $evolucoes = $evolucaoModel->findByProntuarioId($prontuario['id']);
@@ -56,11 +56,7 @@ class ProntuarioController extends Controller
         }
 
         $prontuarioModel = new Prontuario();
-        $prontuario = $prontuarioModel->findByPacienteId($params['id']);
-
-        if (!$prontuario) {
-            Redirect::to('/pacientes')->with('error', 'Prontuário não encontrado.');
-        }
+        $prontuario = $prontuarioModel->ensureForPaciente((int) $params['id']);
 
         // Get current medico
         $medicoModel = new Medico();
@@ -78,4 +74,3 @@ class ProntuarioController extends Controller
         Redirect::to("/prontuarios/{$params['id']}")->with('success', 'Evolução adicionada com sucesso!');
     }
 }
-

@@ -24,13 +24,13 @@ $paciente = $paciente ?? [];
                 <div class="card-body">
                     <dl class="row">
                         <dt class="col-sm-4">CPF</dt>
-                        <dd class="col-sm-8"><?= $paciente['cpf'] ?></dd>
+                        <dd class="col-sm-8"><?= formatCpf($paciente['cpf']) ?></dd>
                         
                         <dt class="col-sm-4">Data de Nascimento</dt>
                         <dd class="col-sm-8"><?= date('d/m/Y', strtotime($paciente['data_nascimento'])) ?></dd>
                         
                         <dt class="col-sm-4">Telefone</dt>
-                        <dd class="col-sm-8"><?= $paciente['telefone'] ?></dd>
+                        <dd class="col-sm-8"><?= formatPhone($paciente['telefone']) ?></dd>
                     </dl>
                 </div>
             </div>
@@ -62,7 +62,7 @@ $paciente = $paciente ?? [];
                         <dd class="col-sm-8"><?= $paciente['endereco_uf'] ?></dd>
                         
                         <dt class="col-sm-4">CEP</dt>
-                        <dd class="col-sm-8"><?= $paciente['endereco_cep'] ?></dd>
+                        <dd class="col-sm-8"><?= formatCep($paciente['endereco_cep']) ?></dd>
                     </dl>
                 </div>
             </div>

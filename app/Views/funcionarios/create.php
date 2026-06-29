@@ -38,12 +38,15 @@
 
                             <div class="col-md-6">
                                 <label for="senha" class="form-label">Senha</label>
-                                <input type="password" class="form-control" id="senha" name="senha" required>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="senha" name="senha" required>
+                                    <button type="button" class="btn btn-outline-secondary" data-toggle-password="senha">Mostrar</button>
+                                </div>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="cpf" class="form-label">CPF</label>
-                                <input type="text" class="form-control" id="cpf" name="cpf" value="<?= old('cpf') ?>" required>
+                                <input type="text" class="form-control" id="cpf" name="cpf" value="<?= old('cpf') ?>" data-mask="cpf" required>
                             </div>
 
                             <div class="col-md-4">
@@ -53,7 +56,7 @@
 
                             <div class="col-md-4">
                                 <label for="telefone" class="form-label">Telefone</label>
-                                <input type="text" class="form-control" id="telefone" name="telefone" value="<?= old('telefone') ?>">
+                                <input type="text" class="form-control" id="telefone" name="telefone" value="<?= old('telefone') ?>" data-mask="phone">
                             </div>
                         </div>
 
@@ -67,4 +70,3 @@
         </div>
     </div>
 </div>
-

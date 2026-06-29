@@ -10,7 +10,7 @@ $dotenv->load();
 date_default_timezone_set('America/Sao_Paulo');
 
 // Define o caminho das sessões
-$sessionPath = __DIR__ . '/../sessions';
+$sessionPath = __DIR__ . '/../storage/Sessions';
 if (!file_exists($sessionPath)) {
     mkdir($sessionPath, 0777, true);
 }

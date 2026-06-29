@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Database;
 use App\Models\Paciente;
 use App\Models\Funcionario;
 use App\Models\Prontuario;
@@ -21,14 +22,26 @@ class PacienteController extends Controller
 
         $pacienteModel = new Paciente();
         $search = $_GET['search'] ?? '';
-        
+        $page = max(1, (int) ($_GET['page'] ?? 1));
+
         if (!empty($search)) {
             $pacientes = $pacienteModel->search($search);
+            $totalPacientes = count($pacientes);
+            $totalPages = 1;
         } else {
-            $pacientes = $pacienteModel->all();
+            $totalPacientes = $pacienteModel->countRecentModified();
+            $totalPages = max(1, (int) ceil($totalPacientes / 10));
+            $page = min($page, $totalPages);
+            $pacientes = $pacienteModel->recentModifiedPaginated($page, 10);
         }
 
-        $this->view('pacientes/index', ['pacientes' => $pacientes, 'search' => $search]);
+        $this->view('pacientes/index', [
+            'pacientes' => $pacientes,
+            'search' => $search,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'totalPacientes' => $totalPacientes,
+        ]);
     }
 
     public function create()
@@ -58,26 +71,37 @@ class PacienteController extends Controller
         $funcionario = $funcionarioModel->findByUsuarioId(Session::get('usuario_id'));
 
         $pacienteModel = new Paciente();
-        $pacienteId = $pacienteModel->create([
-            'nome_completo' => $data['nome_completo'],
-            'cpf' => $data['cpf'],
-            'data_nascimento' => $data['data_nascimento'],
-            'telefone' => $data['telefone'] ?? null,
-            'endereco_logradouro' => $data['endereco_logradouro'] ?? null,
-            'endereco_numero' => $data['endereco_numero'] ?? null,
-            'endereco_complemento' => $data['endereco_complemento'] ?? null,
-            'endereco_bairro' => $data['endereco_bairro'] ?? null,
-            'endereco_cidade' => $data['endereco_cidade'] ?? null,
-            'endereco_uf' => $data['endereco_uf'] ?? null,
-            'endereco_cep' => $data['endereco_cep'] ?? null,
-            'cadastrado_por' => $funcionario['id'] ?? null
-        ]);
-
-        // Create prontuario
+        $connection = Database::getInstance()->getConnection();
         $prontuarioModel = new Prontuario();
-        $prontuarioModel->create([
-            'paciente_id' => $pacienteId
-        ]);
+
+        try {
+            $connection->beginTransaction();
+
+            $pacienteId = $pacienteModel->create([
+                'nome_completo' => $data['nome_completo'],
+                'cpf' => $data['cpf'],
+                'data_nascimento' => $data['data_nascimento'],
+                'telefone' => $data['telefone'] ?? null,
+                'endereco_logradouro' => $data['endereco_logradouro'] ?? null,
+                'endereco_numero' => $data['endereco_numero'] ?? null,
+                'endereco_complemento' => $data['endereco_complemento'] ?? null,
+                'endereco_bairro' => $data['endereco_bairro'] ?? null,
+                'endereco_cidade' => $data['endereco_cidade'] ?? null,
+                'endereco_uf' => $data['endereco_uf'] ?? null,
+                'endereco_cep' => $data['endereco_cep'] ?? null,
+                'cadastrado_por' => $funcionario['id'] ?? null
+            ]);
+
+            $prontuarioModel->ensureForPaciente($pacienteId);
+
+            $connection->commit();
+        } catch (\Throwable $e) {
+            if ($connection->inTransaction()) {
+                $connection->rollBack();
+            }
+
+            Redirect::to('/pacientes/create')->with('error', 'Nao foi possivel cadastrar o paciente e gerar o prontuario.')->withInput();
+        }
 
         Logger::log('create', 'pacientes', $pacienteId, 'Paciente criado');
 
@@ -95,6 +119,8 @@ class PacienteController extends Controller
         if (!$paciente) {
             Redirect::to('/pacientes')->with('error', 'Paciente não encontrado.');
         }
+
+        (new Prontuario())->ensureForPaciente((int) $params['id']);
 
         $this->view('pacientes/show', ['paciente' => $paciente]);
     }
@@ -174,4 +200,3 @@ class PacienteController extends Controller
         Redirect::to('/pacientes')->with('success', 'Paciente excluído com sucesso!');
     }
 }
-

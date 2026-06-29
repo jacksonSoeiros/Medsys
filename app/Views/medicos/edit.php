@@ -38,7 +38,7 @@ $search = $search ?? '';
 
                             <div class="col-md-4">
                                 <label for="cpf" class="form-label">CPF</label>
-                                <input type="text" class="form-control" id="cpf" name="cpf" value="<?= $medico['cpf'] ?>" required>
+                                <input type="text" class="form-control" id="cpf" name="cpf" value="<?= old('cpf', formatCpf($medico['cpf'])) ?>" data-mask="cpf" required>
                             </div>
 
                             <div class="col-md-4">
@@ -48,7 +48,7 @@ $search = $search ?? '';
 
                             <div class="col-md-4">
                                 <label for="telefone" class="form-label">Telefone</label>
-                                <input type="text" class="form-control" id="telefone" name="telefone" value="<?= $medico['telefone'] ?>">
+                                <input type="text" class="form-control" id="telefone" name="telefone" value="<?= old('telefone', formatPhone($medico['telefone'])) ?>" data-mask="phone">
                             </div>
 
                             <div class="col-md-12">
@@ -58,7 +58,10 @@ $search = $search ?? '';
 
                             <div class="col-md-12">
                                 <label for="senha" class="form-label">Nova Senha <span class="text-muted">(deixe em branco para manter a atual)</span></label>
-                                <input type="password" class="form-control" id="senha" name="senha">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="senha" name="senha">
+                                    <button type="button" class="btn btn-outline-secondary" data-toggle-password="senha">Mostrar</button>
+                                </div>
                             </div>
                         </div>
 

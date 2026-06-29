@@ -4,12 +4,12 @@
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 
-Função para atualizar automaticamente
+/* Função para atualizar automaticamente */
 CREATE OR REPLACE FUNCTION atualizar_timestamp()
 RETURNS TRIGGER AS
 $$
 BEGIN
-    NEW.atualizado_em = NOW();
+    NEW.atualizado_em := NOW();
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

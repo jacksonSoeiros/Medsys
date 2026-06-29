@@ -40,10 +40,10 @@
                             <tr>
                                 <td><?= $funcionario['id'] ?></td>
                                 <td><?= $funcionario['nome_completo'] ?></td>
-                                <td><?= $funcionario['cpf'] ?></td>
+                                <td><?= formatCpf($funcionario['cpf']) ?></td>
                                 <td><?= $funcionario['email'] ?></td>
                                 <td><?= $funcionario['cargo'] ?></td>
-                                <td><?= $funcionario['telefone'] ?></td>
+                                <td><?= formatPhone($funcionario['telefone']) ?></td>
                                 <td class="text-end">
                                     <a href="<?= url("funcionarios/{$funcionario['id']}/edit") ?>" class="btn btn-sm btn-primary me-1">Editar</a>
                                     <a href="<?= url("funcionarios/{$funcionario['id']}/delete") ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
@@ -56,4 +56,3 @@
         </div>
     </div>
 </div>
-

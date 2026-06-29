@@ -19,5 +19,19 @@ class Prontuario extends Model
         $result = $stmt->fetch();
         return $result ?: null;
     }
-}
 
+    public function ensureForPaciente(int $pacienteId): array
+    {
+        $prontuario = $this->findByPacienteId($pacienteId);
+
+        if ($prontuario) {
+            return $prontuario;
+        }
+
+        $this->create([
+            'paciente_id' => $pacienteId,
+        ]);
+
+        return $this->findByPacienteId($pacienteId);
+    }
+}

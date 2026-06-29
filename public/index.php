@@ -8,6 +8,11 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 require_once dirname(__DIR__) . '/config/app.php';
 
+use App\Helpers\Session;
+Session::clearOldFlash();
+
+\App\Core\Installer::check();
+
 use App\Core\Router;
 
 // Obtém o baseUri da variável APP_URL

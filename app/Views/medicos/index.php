@@ -45,11 +45,11 @@ $search = $search ?? '';
                             <tr>
                                 <td><?= $medico['id'] ?></td>
                                 <td><?= $medico['nome_completo'] ?></td>
-                                <td><?= $medico['cpf'] ?></td>
+                                <td><?= formatCpf($medico['cpf']) ?></td>
                                 <td><?= $medico['email'] ?></td>
                                 <td><?= $medico['crm'] ?></td>
                                 <td><?= $medico['especialidade'] ?></td>
-                                <td><?= $medico['telefone'] ?></td>
+                                <td><?= formatPhone($medico['telefone']) ?></td>
                                 <td class="text-end">
                                     <a href="<?= url("medicos/{$medico['id']}/edit") ?>" class="btn btn-sm btn-primary me-1">Editar</a>
                                     <a href="<?= url("medicos/{$medico['id']}/delete") ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
@@ -62,4 +62,3 @@ $search = $search ?? '';
         </div>
     </div>
 </div>
-
