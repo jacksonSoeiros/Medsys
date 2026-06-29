@@ -10,9 +10,6 @@ class Controller
     {
         extract($data);
 
-        // Carrega as funções helper
-        require_once dirname(__DIR__) . '/Helpers/ViewHelper.php';
-
         ob_start();
         require dirname(__DIR__) . "/Views/{$view}.php";
         $content = ob_get_clean();

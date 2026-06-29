@@ -1,3 +1,9 @@
+<?php
+use App\Helpers\ViewHelper;
+use App\Helpers\Security;
+use App\Helpers\Session;
+?>
+
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-lg" style="width: 100%; max-width: 420px;">
         <div class="card-body p-4">
@@ -6,7 +12,9 @@
                 <p class="text-muted">Sistema de Gerenciamento</p>
             </div>
 
-            <?php if (\App\Helpers\Session::hasFlash('error')): ?>
+            <?php
+            if (\App\Helpers\Session::hasFlash('error')):
+                ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <?= \App\Helpers\Session::flash('error') ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -21,13 +29,14 @@
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
+            
 
-            <form method="POST" action="<?= url('login') ?>">
-                <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
+            <form method="POST" action="<?= ViewHelper::url('login') ?>">
+                <input type="hidden" name="_token" value="<?= Security::generateCsrfToken() ?>">
 
                 <div class="mb-3">
                     <label for="email" class="form-label">E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<?= old('email') ?>" required autofocus>
+                    <input type="email" class="form-control" id="email" name="email" value="<?= ViewHelper::old('email') ?>" required autofocus>
                 </div>
 
                 <div class="mb-4">
