@@ -36,7 +36,7 @@ INSERT INTO usuarios (
 )
 VALUES (
     'admin@medcare.local',
-    '$2y$12$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    '$2y$12$Ctt6MLkvvYKSTth5aYnMU.yPRh5ll58h/ixRCay5h0XK57aQWcSum',
     'administrador',
     TRUE
 );
