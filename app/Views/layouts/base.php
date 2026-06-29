@@ -32,8 +32,9 @@
         .search-box input { width: 300px; padding: 10px; }
     </style>
 </head>
+
 <body>
-    <?= $content ?>
+    <?= $content ?? '' ?>
 </body>
 </html>
 

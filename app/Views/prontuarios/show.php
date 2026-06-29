@@ -1,3 +1,9 @@
+<?php
+$paciente = $paciente ?? [];
+$prontuario = $prontuario ?? [];
+$evolucoes = $evolucoes ?? [];
+?>
+
 <div class="py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h2">Prontuário de <?= $paciente['nome_completo'] ?></h1>
@@ -28,7 +34,7 @@
             <h5 class="card-title mb-0">Nova Evolução</h5>
         </div>
         <div class="card-body">
-            <form method="POST" action="<?= url("prontuarios/{$paciente['id']}/evolucoes") ?>">
+            <form method="POST" action="<?= url("prontuarios/{$prontuario['id']}/evolucoes") ?>">
                 <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
                 
                 <div class="mb-3">

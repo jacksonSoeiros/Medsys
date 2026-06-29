@@ -45,7 +45,7 @@
     </nav>
 
     <main class="container">
-        <?= $content ?>
+        <?= $content ?? '' ?>
     </main>
 
     <script src="<?= url('assets/js/bootstrap.bundle.min.js') ?>"></script>
