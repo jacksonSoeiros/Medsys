@@ -1,33 +1,43 @@
-<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-    <div class="card" style="width: 100%; max-width: 400px;">
-        <h1 style="text-align: center; margin-bottom: 20px;">MedCare</h1>
-        <h2 style="text-align: center; margin-bottom: 20px;">Login</h2>
-        
-        <?php if (\App\Helpers\Session::hasFlash('error')): ?>
-            <div class="alert alert-error"><?= \App\Helpers\Session::flash('error') ?></div>
-        <?php endif; ?>
-        
-        <?php if (\App\Helpers\Session::hasFlash('errors')): ?>
-            <?php foreach (\App\Helpers\Session::flash('errors') as $error): ?>
-                <div class="alert alert-error"><?= $error ?></div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-        
-        <form method="POST" action="/login">
-            <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
-            
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" value="<?= old('email') ?>" required>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg" style="width: 100%; max-width: 420px;">
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <h1 class="display-6">🏥 MedCare</h1>
+                <p class="text-muted">Sistema de Gerenciamento</p>
             </div>
-            
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" required>
-            </div>
-            
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
-        </form>
+
+            <?php if (\App\Helpers\Session::hasFlash('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?= \App\Helpers\Session::flash('error') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (\App\Helpers\Session::hasFlash('errors')): ?>
+                <?php foreach (\App\Helpers\Session::flash('errors') as $error): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?= $error ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <form method="POST" action="<?= url('login') ?>">
+                <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?= old('email') ?>" required autofocus>
+                </div>
+
+                <div class="mb-4">
+                    <label for="senha" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="senha" name="senha" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">Entrar</button>
+            </form>
+        </div>
     </div>
 </div>
 

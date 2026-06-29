@@ -1,4 +1,12 @@
 RewriteEngine On
 
+# Define o base path (importante para subdiretórios)
+RewriteBase /med-sys/
+
+# Redireciona a raiz para a pasta public
 RewriteRule ^$ public/ [L]
-RewriteRule (.*) public/$1 [L]
+
+# Redireciona todas as requisições para a pasta public, exceto se o arquivo/diretório já existir
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*) public/$1 [L,QSA]
