@@ -6,7 +6,7 @@
         <div class="card">
             <h3>Pacientes</h3>
             <p>Gerencie os pacientes do sistema</p>
-            <a href="/pacientes" class="btn btn-primary">Acessar</a>
+            <a href="<?= url('pacientes') ?>" class="btn btn-primary">Acessar</a>
         </div>
     <?php endif; ?>
     
@@ -14,13 +14,13 @@
         <div class="card">
             <h3>Funcionários</h3>
             <p>Gerencie os funcionários do sistema</p>
-            <a href="/funcionarios" class="btn btn-primary">Acessar</a>
+            <a href="<?= url('funcionarios') ?>" class="btn btn-primary">Acessar</a>
         </div>
         
         <div class="card">
             <h3>Médicos</h3>
             <p>Gerencie os médicos do sistema</p>
-            <a href="/medicos" class="btn btn-primary">Acessar</a>
+            <a href="<?= url('medicos') ?>" class="btn btn-primary">Acessar</a>
         </div>
     <?php endif; ?>
     
@@ -28,7 +28,7 @@
         <div class="card">
             <h3>Pacientes</h3>
             <p>Visualize os pacientes e seus prontuários</p>
-            <a href="/pacientes" class="btn btn-primary">Acessar</a>
+            <a href="<?= url('pacientes') ?>" class="btn btn-primary">Acessar</a>
         </div>
     <?php endif; ?>
 </div>

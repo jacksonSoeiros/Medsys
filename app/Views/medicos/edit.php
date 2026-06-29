@@ -10,7 +10,7 @@
     <?php endforeach; ?>
 <?php endif; ?>
 
-<form method="POST" action="/medicos/<?= $medico['id'] ?>">
+<form method="POST" action="<?= url("medicos/{$medico['id']}") ?>">
     <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
     
     <div class="form-group">
@@ -44,6 +44,6 @@
     </div>
     
     <button type="submit" class="btn btn-success">Salvar</button>
-    <a href="/medicos" class="btn btn-secondary">Voltar</a>
+    <a href="<?= url('medicos') ?>" class="btn btn-secondary">Voltar</a>
 </form>
 

@@ -11,14 +11,15 @@ class Redirect
         $this->url = $url;
     }
 
-    public static function to(string $url): self
+    public static function to(string $path): self
     {
+        $url = ViewHelper::url($path);
         return new self($url);
     }
 
     public static function back(): self
     {
-        $url = $_SERVER['HTTP_REFERER'] ?? '/';
+        $url = $_SERVER['HTTP_REFERER'] ?? ViewHelper::url('/');
         return new self($url);
     }
 

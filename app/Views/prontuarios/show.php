@@ -12,7 +12,7 @@
 
 <div class="card" style="margin-bottom: 30px;">
     <h3>Nova Evolução</h3>
-    <form method="POST" action="/prontuarios/<?= $paciente['id'] ?>/evolucoes">
+    <form method="POST" action="<?= url("prontuarios/{$paciente['id']}/evolucoes") ?>">
         <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
         
         <div class="form-group">
@@ -41,7 +41,7 @@
 <?php endif; ?>
 
 <div style="margin-top: 20px;">
-    <a href="/pacientes" class="btn btn-secondary">Voltar à Lista de Pacientes</a>
-    <a href="/pacientes/<?= $paciente['id'] ?>" class="btn btn-primary">Dados do Paciente</a>
+    <a href="<?= url('pacientes') ?>" class="btn btn-secondary">Voltar à Lista de Pacientes</a>
+    <a href="<?= url("pacientes/{$paciente['id']}") ?>" class="btn btn-primary">Dados do Paciente</a>
 </div>
 

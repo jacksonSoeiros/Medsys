@@ -5,6 +5,12 @@ namespace App\Core;
 class Router
 {
     private array $routes = [];
+    private string $baseUri;
+
+    public function __construct(string $baseUri = '')
+    {
+        $this->baseUri = rtrim($baseUri, '/');
+    }
 
     public function get(string $uri, array $action): void
     {
@@ -19,6 +25,16 @@ class Router
     public function dispatch(string $uri, string $method): void
     {
         $uri = parse_url($uri, PHP_URL_PATH);
+
+        // Remove o prefixo do baseUri da URI recebida
+        if ($this->baseUri !== '' && strpos($uri, $this->baseUri) === 0) {
+            $uri = substr($uri, strlen($this->baseUri));
+        }
+
+        // Se a URI ficar vazia, define como '/'
+        if ($uri === '') {
+            $uri = '/';
+        }
 
         // First check for exact matches
         if (isset($this->routes[$method][$uri])) {

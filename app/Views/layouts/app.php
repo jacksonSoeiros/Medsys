@@ -34,20 +34,20 @@
 </head>
 <body>
     <nav>
-        <a href="/dashboard">Início</a>
+        <a href="<?= url('dashboard') ?>">Início</a>
         <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador'])): ?>
-            <a href="/funcionarios">Funcionários</a>
-            <a href="/medicos">Médicos</a>
+            <a href="<?= url('funcionarios') ?>">Funcionários</a>
+            <a href="<?= url('medicos') ?>">Médicos</a>
         <?php endif; ?>
         <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
-            <a href="/pacientes">Pacientes</a>
+            <a href="<?= url('pacientes') ?>">Pacientes</a>
         <?php endif; ?>
         <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['medico'])): ?>
-            <a href="/pacientes">Pacientes</a>
+            <a href="<?= url('pacientes') ?>">Pacientes</a>
         <?php endif; ?>
         <div class="nav-right">
             <span style="color: white; margin-right: 20px;"><?= \App\Helpers\Session::get('usuario_nome') ?></span>
-            <a href="/logout">Sair</a>
+            <a href="<?= url('logout') ?>">Sair</a>
         </div>
     </nav>
     <div class="container">

@@ -8,7 +8,7 @@
     <div class="alert alert-error"><?= \App\Helpers\Session::flash('error') ?></div>
 <?php endif; ?>
 
-<a href="/medicos/create" class="btn btn-success">Novo Médico</a>
+<a href="<?= url('medicos/create') ?>" class="btn btn-success">Novo Médico</a>
 
 <table>
     <thead>
@@ -34,8 +34,8 @@
                 <td><?= $medico['especialidade'] ?></td>
                 <td><?= $medico['telefone'] ?></td>
                 <td>
-                    <a href="/medicos/<?= $medico['id'] ?>/edit" class="btn btn-primary">Editar</a>
-                    <a href="/medicos/<?= $medico['id'] ?>/delete" class="btn btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                    <a href="<?= url("medicos/{$medico['id']}/edit") ?>" class="btn btn-primary">Editar</a>
+                    <a href="<?= url("medicos/{$medico['id']}/delete") ?>" class="btn btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
                 </td>
             </tr>
         <?php endforeach; ?>

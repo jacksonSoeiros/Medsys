@@ -9,15 +9,15 @@
 <?php endif; ?>
 
 <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
-    <a href="/pacientes/create" class="btn btn-success">Novo Paciente</a>
+    <a href="<?= url('pacientes/create') ?>" class="btn btn-success">Novo Paciente</a>
 <?php endif; ?>
 
 <div class="search-box" style="margin-top: 20px;">
-    <form method="GET" action="/pacientes">
+    <form method="GET" action="<?= url('pacientes') ?>">
         <input type="text" name="search" placeholder="Buscar por nome, CPF ou cidade..." value="<?= htmlspecialchars($search) ?>" style="width: 400px; padding: 10px;">
         <button type="submit" class="btn btn-primary">Buscar</button>
         <?php if (!empty($search)): ?>
-            <a href="/pacientes" class="btn btn-secondary">Limpar</a>
+            <a href="<?= url('pacientes') ?>" class="btn btn-secondary">Limpar</a>
         <?php endif; ?>
     </form>
 </div>
@@ -42,13 +42,13 @@
                 <td><?= date('d/m/Y', strtotime($paciente['data_nascimento'])) ?></td>
                 <td><?= $paciente['endereco_cidade'] ?></td>
                 <td>
-                    <a href="/pacientes/<?= $paciente['id'] ?>" class="btn btn-primary">Visualizar</a>
+                    <a href="<?= url("pacientes/{$paciente['id']}") ?>" class="btn btn-primary">Visualizar</a>
                     <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
-                        <a href="/pacientes/<?= $paciente['id'] ?>/edit" class="btn btn-primary">Editar</a>
-                        <a href="/pacientes/<?= $paciente['id'] ?>/delete" class="btn btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                        <a href="<?= url("pacientes/{$paciente['id']}/edit") ?>" class="btn btn-primary">Editar</a>
+                        <a href="<?= url("pacientes/{$paciente['id']}/delete") ?>" class="btn btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
                     <?php endif; ?>
                     <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['medico'])): ?>
-                        <a href="/prontuarios/<?= $paciente['id'] ?>" class="btn btn-success">Prontuário</a>
+                        <a href="<?= url("prontuarios/{$paciente['id']}") ?>" class="btn btn-success">Prontuário</a>
                     <?php endif; ?>
                 </td>
             </tr>

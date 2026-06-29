@@ -17,12 +17,12 @@
 </div>
 
 <div style="margin-top: 20px;">
-    <a href="/pacientes" class="btn btn-secondary">Voltar</a>
+    <a href="<?= url('pacientes') ?>" class="btn btn-secondary">Voltar</a>
     <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
-        <a href="/pacientes/<?= $paciente['id'] ?>/edit" class="btn btn-primary">Editar</a>
+        <a href="<?= url("pacientes/{$paciente['id']}/edit") ?>" class="btn btn-primary">Editar</a>
     <?php endif; ?>
     <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['medico'])): ?>
-        <a href="/prontuarios/<?= $paciente['id'] ?>" class="btn btn-success">Prontuário</a>
+        <a href="<?= url("prontuarios/{$paciente['id']}") ?>" class="btn btn-success">Prontuário</a>
     <?php endif; ?>
 </div>
 

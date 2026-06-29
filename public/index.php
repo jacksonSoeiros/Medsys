@@ -6,7 +6,11 @@ require_once dirname(__DIR__) . '/config/app.php';
 
 use App\Core\Router;
 
-$router = new Router();
+// Obtém o baseUri da variável APP_URL
+$appUrl = $_ENV['APP_URL'] ?? '';
+$baseUri = parse_url($appUrl, PHP_URL_PATH) ?: '/';
+
+$router = new Router($baseUri);
 
 require_once dirname(__DIR__) . '/routes/web.php';
 

@@ -10,7 +10,7 @@
     <?php endforeach; ?>
 <?php endif; ?>
 
-<form method="POST" action="/funcionarios/<?= $funcionario['id'] ?>">
+<form method="POST" action="<?= url("funcionarios/{$funcionario['id']}") ?>">
     <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
     
     <div class="form-group">
@@ -39,6 +39,6 @@
     </div>
     
     <button type="submit" class="btn btn-success">Salvar</button>
-    <a href="/funcionarios" class="btn btn-secondary">Voltar</a>
+    <a href="<?= url('funcionarios') ?>" class="btn btn-secondary">Voltar</a>
 </form>
 
