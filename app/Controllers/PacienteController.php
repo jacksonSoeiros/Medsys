@@ -15,12 +15,22 @@ use App\Helpers\Logger;
 
 class PacienteController extends Controller
 {
+    private function normalizePacienteData(array $data): array
+    {
+        $data['cpf'] = preg_replace('/\D+/', '', $data['cpf'] ?? '');
+        $data['telefone'] = preg_replace('/\D+/', '', $data['telefone'] ?? '');
+        $data['endereco_cep'] = preg_replace('/\D+/', '', $data['endereco_cep'] ?? '');
+
+        return $data;
+    }
+
     public function index()
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'medico']);
+        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'consultador', 'chefe_equipe', 'medico']);
 
         $pacienteModel = new Paciente();
+        $pacienteModel->ensureCodesForAll();
         $search = $_GET['search'] ?? '';
         $page = max(1, (int) ($_GET['page'] ?? 1));
 
@@ -47,17 +57,17 @@ class PacienteController extends Controller
     public function create()
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario']);
+        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'consultador', 'chefe_equipe']);
         $this->view('pacientes/create');
     }
 
     public function store()
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario']);
+        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'consultador', 'chefe_equipe']);
         (new \App\Middleware\CsrfMiddleware())->handle();
 
-        $data = Security::sanitizeArray($_POST);
+        $data = $this->normalizePacienteData(Security::sanitizeArray($_POST));
 
         $validator = new Validator($data);
         $validator->required('nome_completo')->required('cpf')->cpf('cpf')->required('data_nascimento');
@@ -71,6 +81,7 @@ class PacienteController extends Controller
         $funcionario = $funcionarioModel->findByUsuarioId(Session::get('usuario_id'));
 
         $pacienteModel = new Paciente();
+        $pacienteModel->ensureCodesForAll();
         $connection = Database::getInstance()->getConnection();
         $prontuarioModel = new Prontuario();
 
@@ -111,9 +122,10 @@ class PacienteController extends Controller
     public function show($params)
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'medico']);
+        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'consultador', 'chefe_equipe', 'medico']);
 
         $pacienteModel = new Paciente();
+        $pacienteModel->ensureCodesForAll();
         $paciente = $pacienteModel->find($params['id']);
 
         if (!$paciente) {
@@ -128,9 +140,10 @@ class PacienteController extends Controller
     public function edit($params)
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario']);
+        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'consultador', 'chefe_equipe']);
 
         $pacienteModel = new Paciente();
+        $pacienteModel->ensureCodesForAll();
         $paciente = $pacienteModel->find($params['id']);
 
         if (!$paciente) {
@@ -143,12 +156,13 @@ class PacienteController extends Controller
     public function update($params)
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario']);
+        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'consultador', 'chefe_equipe']);
         (new \App\Middleware\CsrfMiddleware())->handle();
 
-        $data = Security::sanitizeArray($_POST);
+        $data = $this->normalizePacienteData(Security::sanitizeArray($_POST));
 
         $pacienteModel = new Paciente();
+        $pacienteModel->ensureCodesForAll();
         $paciente = $pacienteModel->find($params['id']);
 
         if (!$paciente) {
@@ -184,9 +198,11 @@ class PacienteController extends Controller
     public function delete($params)
     {
         (new \App\Middleware\AuthMiddleware())->handle();
-        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario']);
+        (new \App\Middleware\RoleMiddleware())->handle(['administrador', 'funcionario', 'consultador', 'chefe_equipe']);
+        (new \App\Middleware\CsrfMiddleware())->handle();
 
         $pacienteModel = new Paciente();
+        $pacienteModel->ensureCodesForAll();
         $paciente = $pacienteModel->find($params['id']);
 
         if (!$paciente) {

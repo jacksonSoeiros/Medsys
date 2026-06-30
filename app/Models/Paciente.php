@@ -8,16 +8,44 @@ class Paciente extends Model
 {
     protected string $table = 'pacientes';
 
+    public function create(array $data): int
+    {
+        $patientId = parent::create($data);
+        $this->ensureCode($patientId);
+
+        return $patientId;
+    }
+
+    public function ensureCode(int $patientId): void
+    {
+        $sql = "UPDATE {$this->table}
+                SET codigo_paciente = COALESCE(codigo_paciente, ?)
+                WHERE id = ?";
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->execute([$patientId, $patientId]);
+    }
+
+    public function ensureCodesForAll(): void
+    {
+        $sql = "UPDATE {$this->table}
+                SET codigo_paciente = id
+                WHERE codigo_paciente IS NULL";
+        $this->db->getConnection()->exec($sql);
+    }
+
     public function search(string $term): array
     {
-        $sql = "SELECT * FROM {$this->table} 
-                WHERE nome_completo ILIKE ? 
-                OR cpf ILIKE ? 
+        $digits = preg_replace('/\D+/', '', $term);
+        $sql = "SELECT * FROM {$this->table}
+                WHERE nome_completo ILIKE ?
+                OR cpf ILIKE ?
                 OR endereco_cidade ILIKE ?
+                OR CAST(codigo_paciente AS TEXT) ILIKE ?
                 ORDER BY nome_completo ASC";
         $term = "%{$term}%";
+        $codeTerm = '%' . $digits . '%';
         $stmt = $this->db->getConnection()->prepare($sql);
-        $stmt->execute([$term, $term, $term]);
+        $stmt->execute([$term, $term, $term, $codeTerm]);
         return $stmt->fetchAll();
     }
 

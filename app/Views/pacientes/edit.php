@@ -4,12 +4,17 @@ $search = $search ?? '';
 $ufs = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 ?>
 
-<div class="py-5">
+<div class="page-shell">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h1 class="h4 mb-0">Editar Paciente</h1>
+            <section class="page-hero mb-4">
+                <div class="page-eyebrow">Cadastro clínico</div>
+                <h1 class="page-title">Editar paciente</h1>
+                <p class="page-subtitle">Código atual: <strong><?= e(formatPatientCode($paciente['codigo_paciente'] ?? null)) ?></strong></p>
+            </section>
+            <div class="card content-card">
+                <div class="card-header">
+                    <h1 class="h4 mb-0">Atualização cadastral</h1>
                 </div>
                 <div class="card-body">
                     <?php if (\App\Helpers\Session::hasFlash('error')): ?>

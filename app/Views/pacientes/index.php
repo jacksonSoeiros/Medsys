@@ -6,20 +6,23 @@ $totalPages = $totalPages ?? 1;
 $totalPacientes = $totalPacientes ?? count($pacientes);
 ?>
 
-<div class="py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h2 mb-1">Pacientes</h1>
-            <p class="text-muted mb-0">
-                <?= $search !== '' ? 'Resultado da busca atual.' : 'Exibindo os 10 pacientes modificados mais recentemente nos ultimos 30 dias.' ?>
-            </p>
+<div class="page-shell">
+    <section class="page-hero mb-4">
+        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+            <div>
+                <div class="page-eyebrow">Cadastro clínico</div>
+                <h1 class="page-title">Pacientes</h1>
+                <p class="page-subtitle">
+                    <?= $search !== '' ? 'Resultado refinado da sua busca atual.' : 'Visualize rapidamente os pacientes atualizados recentemente e acesse ações essenciais com mais clareza.' ?>
+                </p>
+            </div>
+            <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario', 'consultador', 'chefe_equipe'])): ?>
+                <a href="<?= url('pacientes/create') ?>" class="btn btn-success px-4">
+                    Novo paciente
+                </a>
+            <?php endif; ?>
         </div>
-        <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
-            <a href="<?= url('pacientes/create') ?>" class="btn btn-success">
-                <i class="bi bi-plus-lg"></i> Novo Paciente
-            </a>
-        <?php endif; ?>
-    </div>
+    </section>
 
     <?php if (\App\Helpers\Session::hasFlash('success')): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -35,12 +38,12 @@ $totalPacientes = $totalPacientes ?? count($pacientes);
         </div>
     <?php endif; ?>
 
-    <div class="card shadow-sm mb-4">
+    <div class="card toolbar-card mb-4">
         <div class="card-body">
             <form method="GET" action="<?= url('pacientes') ?>" class="row g-3">
                 <div class="col-md-8">
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Buscar por nome, CPF ou cidade..." value="<?= htmlspecialchars($search) ?>">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar por código, nome, CPF ou cidade..." value="<?= htmlspecialchars($search) ?>">
                         <button type="submit" class="btn btn-primary">Buscar</button>
                         <?php if (!empty($search)): ?>
                             <a href="<?= url('pacientes') ?>" class="btn btn-secondary">Limpar</a>
@@ -51,13 +54,13 @@ $totalPacientes = $totalPacientes ?? count($pacientes);
         </div>
     </div>
 
-    <div class="card shadow-sm">
+    <div class="card content-card table-panel">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
+                            <th>Código</th>
                             <th>Nome</th>
                             <th>CPF</th>
                             <th>Data de Nascimento</th>
@@ -73,20 +76,28 @@ $totalPacientes = $totalPacientes ?? count($pacientes);
                         <?php endif; ?>
                         <?php foreach ($pacientes as $paciente): ?>
                             <tr>
-                                <td><?= $paciente['id'] ?></td>
-                                <td><?= $paciente['nome_completo'] ?></td>
+                                <td><span class="patient-code-badge"><?= e(formatPatientCode($paciente['codigo_paciente'] ?? null)) ?></span></td>
+                                <td class="text-break"><?= e($paciente['nome_completo']) ?></td>
                                 <td><?= formatCpf($paciente['cpf']) ?></td>
                                 <td><?= date('d/m/Y', strtotime($paciente['data_nascimento'])) ?></td>
-                                <td><?= $paciente['endereco_cidade'] ?></td>
+                                <td><?= e($paciente['endereco_cidade'] ?? '') ?></td>
                                 <td class="text-end">
+                                    <div class="table-actions">
                                     <a href="<?= url("pacientes/{$paciente['id']}") ?>" class="btn btn-sm btn-view me-1">Visualizar</a>
-                                    <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
+                                    <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario', 'consultador', 'chefe_equipe'])): ?>
                                         <a href="<?= url("pacientes/{$paciente['id']}/edit") ?>" class="btn btn-sm btn-primary me-1">Editar</a>
-                                        <a href="<?= url("pacientes/{$paciente['id']}/delete") ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                                        <a href="<?= url("prontuarios/{$paciente['id']}/imprimir") ?>" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary me-1">Imprimir</a>
+                                    <?php endif; ?>
+                                    <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario', 'chefe_equipe'])): ?>
+                                        <form method="POST" action="<?= url("pacientes/{$paciente['id']}/delete") ?>" onsubmit="return confirm('Tem certeza?')">
+                                            <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                        </form>
                                     <?php endif; ?>
                                     <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['medico'])): ?>
                                         <a href="<?= url("prontuarios/{$paciente['id']}") ?>" class="btn btn-sm btn-success">Prontuário</a>
                                     <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

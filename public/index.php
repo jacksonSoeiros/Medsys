@@ -11,6 +11,11 @@ require_once dirname(__DIR__) . '/config/app.php';
 use App\Helpers\Session;
 Session::clearOldFlash();
 
+header('X-Frame-Options: SAMEORIGIN');
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+
 \App\Core\Installer::check();
 
 use App\Core\Router;

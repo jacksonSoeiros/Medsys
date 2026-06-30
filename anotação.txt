@@ -9,3 +9,14 @@ aplicativo mobile;
 multiempresa;
 telemedicina;
 assinatura digital.
+
+
+Teste DB: 
+DR>
+Nome Completo: Dr. Gabriel Silva Costa
+E-mail: dr.gabriel.costa@teste.com
+Senha: Teste@123456
+CPF: 529.982.247-25
+CRM: SP123456
+Telefone: (11) 98765-4321
+Especialidade: Cardiologia

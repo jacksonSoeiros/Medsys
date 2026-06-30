@@ -71,6 +71,31 @@ namespace App\Helpers {
 
             return preg_replace('/(\d{5})(\d{3})/', '$1-$2', $digits);
         }
+
+        public static function roleLabel(?string $role): string
+        {
+            return match ($role) {
+                'administrador' => 'Admin',
+                'consultador' => 'Consultador',
+                'chefe_equipe' => 'Chefe de Equipe',
+                'funcionario' => 'Funcionario',
+                'medico' => 'Medico',
+                default => (string) ($role ?? ''),
+            };
+        }
+
+        public static function formatPatientCode(null|int|string $code): string
+        {
+            if ($code === null || $code === '') {
+                return '';
+            }
+
+            if (is_numeric($code)) {
+                return 'PAC-' . str_pad((string) $code, 6, '0', STR_PAD_LEFT);
+            }
+
+            return (string) $code;
+        }
     }
 }
 
@@ -113,5 +138,15 @@ namespace {
     function formatCep(?string $cep): string
     {
         return \App\Helpers\ViewHelper::formatCep($cep);
+    }
+
+    function roleLabel(?string $role): string
+    {
+        return \App\Helpers\ViewHelper::roleLabel($role);
+    }
+
+    function formatPatientCode(null|int|string $code): string
+    {
+        return \App\Helpers\ViewHelper::formatPatientCode($code);
     }
 }

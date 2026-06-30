@@ -82,7 +82,7 @@ class MedicoController extends Controller
         (new \App\Middleware\RoleMiddleware())->handle(['administrador']);
 
         $medicoModel = new Medico();
-        $medico = $medicoModel->findByUsuarioId($params['id']);
+        $medico = $medicoModel->find($params['id']);
 
         if (!$medico) {
             Redirect::to('/medicos')->with('error', 'Médico não encontrado.');
@@ -139,6 +139,7 @@ class MedicoController extends Controller
     {
         (new \App\Middleware\AuthMiddleware())->handle();
         (new \App\Middleware\RoleMiddleware())->handle(['administrador']);
+        (new \App\Middleware\CsrfMiddleware())->handle();
 
         $medicoModel = new Medico();
         $medico = $medicoModel->find($params['id']);

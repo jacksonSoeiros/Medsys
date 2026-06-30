@@ -4,6 +4,12 @@ namespace App\Helpers;
 
 class Session
 {
+    private static function timeoutInSeconds(): int
+    {
+        $timeout = (int) ($_ENV['SESSION_TIMEOUT'] ?? 600);
+        return $timeout > 0 ? $timeout : 600;
+    }
+
     public static function start(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -15,6 +21,34 @@ class Session
     {
         self::start();
         $_SESSION[$key] = $value;
+    }
+
+    public static function regenerate(bool $deleteOldSession = true): void
+    {
+        self::start();
+        session_regenerate_id($deleteOldSession);
+    }
+
+    public static function touchActivity(): void
+    {
+        self::start();
+        $_SESSION['__last_activity'] = time();
+    }
+
+    public static function getTimeoutInSeconds(): int
+    {
+        return self::timeoutInSeconds();
+    }
+
+    public static function isExpired(): bool
+    {
+        self::start();
+
+        if (!isset($_SESSION['__last_activity'])) {
+            return false;
+        }
+
+        return (time() - (int) $_SESSION['__last_activity']) >= self::timeoutInSeconds();
     }
 
     public static function get(string $key, mixed $default = null): mixed

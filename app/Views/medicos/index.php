@@ -3,12 +3,16 @@ $medicos = $medicos ?? [];
 $search = $search ?? '';
 ?>
 <div class="py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h2">Médicos</h1>
-        <a href="<?= url('medicos/create') ?>" class="btn btn-success">
-            <i class="bi bi-plus-lg"></i> Novo Médico
-        </a>
-    </div>
+    <section class="page-hero mb-4">
+        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+            <div>
+                <div class="page-eyebrow">Equipe médica</div>
+                <h1 class="page-title">Médicos</h1>
+                <p class="page-subtitle">Gerencie profissionais e especialidades com uma leitura mais limpa e institucional.</p>
+            </div>
+            <a href="<?= url('medicos/create') ?>" class="btn btn-success px-4">Novo médico</a>
+        </div>
+    </section>
 
     <?php if (\App\Helpers\Session::hasFlash('success')): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -24,7 +28,7 @@ $search = $search ?? '';
         </div>
     <?php endif; ?>
 
-    <div class="card shadow-sm">
+    <div class="card content-card table-panel">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
@@ -51,8 +55,13 @@ $search = $search ?? '';
                                 <td><?= $medico['especialidade'] ?></td>
                                 <td><?= formatPhone($medico['telefone']) ?></td>
                                 <td class="text-end">
-                                    <a href="<?= url("medicos/{$medico['id']}/edit") ?>" class="btn btn-sm btn-primary me-1">Editar</a>
-                                    <a href="<?= url("medicos/{$medico['id']}/delete") ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                                    <div class="table-actions">
+                                        <a href="<?= url("medicos/{$medico['id']}/edit") ?>" class="btn btn-sm btn-primary">Editar</a>
+                                        <form method="POST" action="<?= url("medicos/{$medico['id']}/delete") ?>" onsubmit="return confirm('Tem certeza?')">
+                                            <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

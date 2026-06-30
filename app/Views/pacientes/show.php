@@ -1,16 +1,23 @@
 <?php
 $paciente = $paciente ?? [];
 ?>
-<div class="py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h2"><?= $paciente['nome_completo'] ?></h1>
-        <div class="d-flex gap-2">
+<div class="page-shell">
+    <div class="page-header mb-4">
+        <div>
+            <div class="page-eyebrow">Paciente</div>
+            <h1 class="page-title"><?= e($paciente['nome_completo']) ?></h1>
+            <p class="page-subtitle">Código para pesquisa: <strong><?= e(formatPatientCode($paciente['codigo_paciente'] ?? null)) ?></strong></p>
+        </div>
+        <div class="page-actions">
             <a href="<?= url('pacientes') ?>" class="btn btn-secondary">Voltar</a>
-            <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario'])): ?>
+            <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario', 'consultador', 'chefe_equipe'])): ?>
                 <a href="<?= url("pacientes/{$paciente['id']}/edit") ?>" class="btn btn-primary">Editar</a>
             <?php endif; ?>
             <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['medico'])): ?>
                 <a href="<?= url("prontuarios/{$paciente['id']}") ?>" class="btn btn-success">Prontuário</a>
+            <?php endif; ?>
+            <?php if (in_array(\App\Helpers\Session::get('usuario_papel'), ['administrador', 'funcionario', 'consultador', 'chefe_equipe', 'medico'])): ?>
+                <a href="<?= url("prontuarios/{$paciente['id']}/imprimir") ?>" target="_blank" rel="noopener" class="btn btn-outline-primary">Imprimir prontuário</a>
             <?php endif; ?>
         </div>
     </div>
@@ -25,6 +32,9 @@ $paciente = $paciente ?? [];
                     <dl class="row">
                         <dt class="col-sm-4">CPF</dt>
                         <dd class="col-sm-8"><?= formatCpf($paciente['cpf']) ?></dd>
+
+                        <dt class="col-sm-4">Código</dt>
+                        <dd class="col-sm-8"><?= e(formatPatientCode($paciente['codigo_paciente'] ?? null)) ?></dd>
                         
                         <dt class="col-sm-4">Data de Nascimento</dt>
                         <dd class="col-sm-8"><?= date('d/m/Y', strtotime($paciente['data_nascimento'])) ?></dd>

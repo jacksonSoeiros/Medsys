@@ -29,5 +29,17 @@ class Funcionario extends Model
         $stmt = $this->db->getConnection()->query($sql);
         return $stmt->fetchAll();
     }
-}
 
+    public function findWithUsuarioById(int $id): ?array
+    {
+        $sql = "SELECT f.*, u.email, u.papel, u.ativo
+                FROM {$this->table} f
+                JOIN usuarios u ON f.usuario_id = u.id
+                WHERE f.id = ?";
+        $stmt = $this->db->getConnection()->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetch();
+
+        return $result ?: null;
+    }
+}

@@ -21,7 +21,7 @@ CREATE TABLE usuarios (
     email VARCHAR(255) NOT NULL UNIQUE,
     senha_hash VARCHAR(255) NOT NULL,
     papel VARCHAR(20) NOT NULL
-        CHECK (papel IN ('administrador','funcionario','medico')),
+        CHECK (papel IN ('administrador','funcionario','consultador','chefe_equipe','medico')),
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     ultimo_login TIMESTAMP,
     criado_em TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -93,6 +93,7 @@ EXECUTE FUNCTION atualizar_timestamp();
 CREATE TABLE pacientes (
 
     id BIGSERIAL PRIMARY KEY,
+    codigo_paciente BIGINT UNIQUE,
     nome_completo VARCHAR(255) NOT NULL,
     cpf VARCHAR(14) NOT NULL UNIQUE,
     data_nascimento DATE NOT NULL,
@@ -169,6 +170,30 @@ CREATE TABLE prontuario_evolucoes (
         ON UPDATE CASCADE,
 
     CONSTRAINT fk_evolucao_medico
+        FOREIGN KEY (medico_id)
+        REFERENCES medicos(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+
+/*Tabela prontuario_anexos*/
+CREATE TABLE prontuario_anexos (
+    id BIGSERIAL PRIMARY KEY,
+    prontuario_id BIGINT NOT NULL,
+    medico_id BIGINT NOT NULL,
+    nome_original VARCHAR(255) NOT NULL,
+    caminho_arquivo VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(100) NOT NULL,
+    registrado_em TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_anexo_prontuario
+        FOREIGN KEY (prontuario_id)
+        REFERENCES prontuarios(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_anexo_medico
         FOREIGN KEY (medico_id)
         REFERENCES medicos(id)
         ON DELETE RESTRICT
@@ -262,6 +287,9 @@ CREATE TABLE configuracoes (
 CREATE INDEX idx_paciente_nome
 ON pacientes(nome_completo);
 
+CREATE INDEX idx_paciente_codigo
+ON pacientes(codigo_paciente);
+
 CREATE INDEX idx_paciente_cidade
 ON pacientes(endereco_cidade);
 
@@ -276,6 +304,12 @@ ON prontuario_evolucoes(medico_id);
 
 CREATE INDEX idx_evolucao_data
 ON prontuario_evolucoes(registrado_em DESC);
+
+CREATE INDEX idx_anexo_prontuario
+ON prontuario_anexos(prontuario_id);
+
+CREATE INDEX idx_anexo_data
+ON prontuario_anexos(registrado_em DESC);
 
 CREATE INDEX idx_log_usuario
 ON logs(usuario_id);
@@ -294,6 +328,7 @@ COMMENT ON TABLE medicos IS 'Profissionais médicos';
 COMMENT ON TABLE pacientes IS 'Cadastro geral de pacientes';
 COMMENT ON TABLE prontuarios IS 'Prontuário principal do paciente';
 COMMENT ON TABLE prontuario_evolucoes IS 'Histórico de evoluções médicas';
+COMMENT ON TABLE prontuario_anexos IS 'Imagens anexadas ao prontuário do paciente';
 COMMENT ON TABLE logs IS 'Auditoria do sistema';
 COMMENT ON TABLE login_tentativas IS 'Controle de tentativas de login';
 COMMENT ON TABLE sessoes IS 'Sessões ativas';

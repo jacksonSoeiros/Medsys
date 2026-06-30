@@ -1,10 +1,14 @@
 <div class="py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h2">Funcionários</h1>
-        <a href="<?= url('funcionarios/create') ?>" class="btn btn-success">
-            <i class="bi bi-plus-lg"></i> Novo Funcionário
-        </a>
-    </div>
+    <section class="page-hero mb-4">
+        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+            <div>
+                <div class="page-eyebrow">Operação interna</div>
+                <h1 class="page-title">Funcionários</h1>
+                <p class="page-subtitle">Controle a equipe com visual mais sóbrio, melhor espaçamento e ações mais evidentes.</p>
+            </div>
+            <a href="<?= url('funcionarios/create') ?>" class="btn btn-success px-4">Novo funcionário</a>
+        </div>
+    </section>
 
     <?php if (\App\Helpers\Session::hasFlash('success')): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -20,7 +24,7 @@
         </div>
     <?php endif; ?>
 
-    <div class="card shadow-sm">
+    <div class="card content-card table-panel">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
@@ -28,6 +32,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
+                            <th>Perfil</th>
                             <th>CPF</th>
                             <th>E-mail</th>
                             <th>Cargo</th>
@@ -40,13 +45,19 @@
                             <tr>
                                 <td><?= $funcionario['id'] ?></td>
                                 <td><?= $funcionario['nome_completo'] ?></td>
+                                <td><?= roleLabel($funcionario['papel']) ?></td>
                                 <td><?= formatCpf($funcionario['cpf']) ?></td>
                                 <td><?= $funcionario['email'] ?></td>
                                 <td><?= $funcionario['cargo'] ?></td>
                                 <td><?= formatPhone($funcionario['telefone']) ?></td>
                                 <td class="text-end">
-                                    <a href="<?= url("funcionarios/{$funcionario['id']}/edit") ?>" class="btn btn-sm btn-primary me-1">Editar</a>
-                                    <a href="<?= url("funcionarios/{$funcionario['id']}/delete") ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                                    <div class="table-actions">
+                                        <a href="<?= url("funcionarios/{$funcionario['id']}/edit") ?>" class="btn btn-sm btn-primary">Editar</a>
+                                        <form method="POST" action="<?= url("funcionarios/{$funcionario['id']}/delete") ?>" onsubmit="return confirm('Tem certeza?')">
+                                            <input type="hidden" name="_token" value="<?= \App\Helpers\Security::generateCsrfToken() ?>">
+                                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

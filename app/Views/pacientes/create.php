@@ -1,10 +1,17 @@
 <?php $ufs = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']; ?>
 <div class="py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <h1 class="h4 mb-0">Novo Paciente</h1>
+        <div class="col-lg-9">
+            <section class="page-hero mb-4">
+                <div class="page-eyebrow">Novo cadastro</div>
+                <h1 class="page-title">Novo paciente</h1>
+                <p class="page-subtitle">Preencha os dados com mais conforto visual e melhor separação entre identificação e endereço.</p>
+            </section>
+
+            <div class="card content-card">
+                <div class="card-header">
+                    <h1 class="h4 mb-1">Dados do paciente</h1>
+                    <p class="subtle-note mb-0">Campos organizados para uma entrada mais rápida e segura.</p>
                 </div>
                 <div class="card-body">
                     <?php if (\App\Helpers\Session::hasFlash('error')): ?>
@@ -30,6 +37,7 @@
                             <div class="col-md-12">
                                 <label for="nome_completo" class="form-label">Nome Completo</label>
                                 <input type="text" class="form-control" id="nome_completo" name="nome_completo" value="<?= old('nome_completo') ?>" required>
+                                <div class="form-text">O código sequencial do paciente será gerado automaticamente ao salvar.</div>
                             </div>
 
                             <div class="col-md-4">
@@ -49,7 +57,7 @@
 
                             <div class="col-md-12">
                                 <hr>
-                                <h6>Endereço</h6>
+                                <h6 class="fw-bold mb-0">Endereço</h6>
                             </div>
 
                             <div class="col-md-3">
@@ -94,7 +102,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 d-flex gap-2">
+                        <div class="mt-4 d-flex gap-2 flex-wrap">
                             <button type="submit" class="btn btn-success">Salvar</button>
                             <a href="<?= url('pacientes') ?>" class="btn btn-secondary">Voltar</a>
                         </div>

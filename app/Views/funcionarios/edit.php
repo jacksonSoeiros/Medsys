@@ -1,3 +1,4 @@
+<?php $roleOptions = $roleOptions ?? []; ?>
 <div class="py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -37,8 +38,17 @@
                             </div>
 
                             <div class="col-md-4">
+                                <label for="papel" class="form-label">Funcao de Acesso</label>
+                                <select class="form-select" id="papel" name="papel" required>
+                                    <?php foreach ($roleOptions as $roleValue => $roleLabel): ?>
+                                        <option value="<?= $roleValue ?>" <?= old('papel', $funcionario['papel']) === $roleValue ? 'selected' : '' ?>><?= $roleLabel ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
                                 <label for="cargo" class="form-label">Cargo</label>
-                                <input type="text" class="form-control" id="cargo" name="cargo" value="<?= $funcionario['cargo'] ?>">
+                                <input type="text" class="form-control" id="cargo" name="cargo" value="<?= old('cargo', $funcionario['cargo']) ?>">
                             </div>
 
                             <div class="col-md-4">
